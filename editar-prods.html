@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Editar informacion de productos</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <h1>Editar informacion de producto</h1>
+        <div class="two-cols-div">
+            <div>
+                <form id="editar-form">
+                    <label for="id-prod">id</label>
+                    <input type="text" class="form-control left-input" id="id-prod"  disabled="true"/>
+                    <label for="nombre-prod">nombre</label>
+                    <input type="text" class="form-control left-input" id="nombre-prod"/>
+                    <label for="desc-prod">descripcion</label>
+                    <input type="text" class="form-control left-input" id="desc-prod"/>
+                    <label for="cat-prod">categoria</label>
+                    <input type="text" class="form-control left-input" id="cat-prod"/>
+                    <label for="exist-prod">existencias</label>
+                    <input type="text" class="form-control left-input" id="exist-prod"/>
+                </form>
+            </div>
+            <div class="aligned-left-div">
+                <div>
+                    <button type="submit" class="btn btn-primary in-col" id="editarBtn">Guardar cambios</button>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary in-col" id="pedirBtn">Descartar cambios</button>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <script type="text/javascript" src="editar-prods.js"></script>
+    </body>
+</html>

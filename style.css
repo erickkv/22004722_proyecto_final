@@ -1,0 +1,51 @@
+form {
+    padding: 0px 10px;
+}
+
+body {
+    margin: 10px;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    text-align: center;
+    margin: auto;
+}
+
+.in-line {
+    margin: auto;
+    padding: 10px;
+    width: 50%;
+    text-align: center;
+}
+
+.in-col {
+    margin: 5px 10px;
+}
+
+.aligned-left-div {
+    text-align: left;
+    margin-left: 0px;
+}
+
+.form-group, .form-btn, .form-control, .form-select {
+    margin: auto;
+    text-align: center;
+    width: 50%;
+}
+
+.two-cols-div {
+    display: grid;
+    grid-template-columns: 70% 20%;
+}
+
+.left-input {
+    margin-left: 0px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    font-weight: bold;
+}
