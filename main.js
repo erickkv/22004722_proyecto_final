@@ -8,10 +8,6 @@ let dataProductos = [
     {id: 2, nombre: "pollo", descripcion: "pollo entero marca pio rey", categoria: "carnes", existencias: 25}
 ];
 
-let usuarios = [
-    {nombre: "usuario", password: "password"}
-]
-
 //crear conexion
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -44,7 +40,18 @@ function createWindowPrinc() {
             preload: path.join(app.getAppPath(), 'preload.js')
         }
     });
-    ventanaPrinc.loadFile('principal.html')
+    ventanaPrinc.loadFile('principal.html');
+
+    connection.promise()
+        .execute(`SELECT * FROM productos`)
+    .then(([results, fields])=>{
+        console.log(results)
+        console.log(fields)
+        listaVentana.webContents.on('did-finish-load',()=>{
+            listaVentana.webContents.send('recibir-datos',
+            results)
+        })
+    })
 }
 
 //para ventana de edición de información de productos
