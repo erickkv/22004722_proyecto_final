@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
+const mysql = require('mysql2');
 
 let dataProductos = [
     {id: 1, nombre: "jabón de manos", descripcion: "jabón de manos marca X", categoria: "higiene", existencias: 200},
@@ -9,6 +10,14 @@ let dataProductos = [
 let usuarios = [
     {nombre: "usuario", password: "password"}
 ]
+
+//crear conexion
+const connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'usuario1',
+    password: 'password',
+    database: 'punto_de_venta'
+});
 
 let ventana;
 
@@ -69,21 +78,25 @@ function createventanaHacerPedido() {
 //comunicación entre electron y el main
 
 ipcMain.on('registroValido', function(event, args) {
-    let test = false;
-    for (user of usuarios) {
-        if (user.nombre === args[0] && user.password === args[1]) {
-            test = true;
-            ventana.webContents.send('usuarioValido', test);
-            createWindowPrinc();
-            ventanaPrinc.webContents.on('did-finish-load', function() {
-                ventanaPrinc.webContents.send('enviarDatosProds', dataProductos)
-            });
-            return;
+    console.log(args)
+    connection.promise()
+            .execute(`SELECT * FROM usuarios WHERE nombre = '${args[0]}'`)
+    .then(([results, fields])=>{
+        console.log(results)
+        console.log(fields)
+        if(results.length == 1){
+          return bcrypt.compare(args[1], results[0]['pass'])
         }
-    }
-    if (test === false) {
-        ventana.webContents.send('usuarioValido', test)
-    }
+    })
+    .then((result)=>{
+        console.log(result)
+        if(result){
+            createWindowPrinc();
+            ventana.close();
+        }else{
+            loginVentana.webContents.send('inicio-error','Error autenticando')
+        }
+    })
 });
 
 //cargar ventana para editar productos
