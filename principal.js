@@ -13,9 +13,7 @@ let currExist = "";
 let data = [];
 
 window.comunicacion.enviarDatosProds(function(event, dataProductos) {
-    for (prodData of dataProductos) {
-        data.push(prodData);
-    }
+    data = dataProductos;
     populateTable();
     for (let i = 0; i < cells.length; i++) {
         // Take each cell
@@ -71,11 +69,16 @@ function populateTable(){
 
         for(let i in data){
             table += "<tr>";
-            table += "<td>"+ data[i].id +"</td>"
+            table += "<td>"+ data[i].cod +"</td>"
                     + "<td>" + data[i].nombre +"</td>"
                     + "<td>" + data[i].descripcion +"</td>"
-                    + "<td>" + data[i].categoria +"</td>"
-                    + "<td>" + data[i].existencias +"</td>" ;
+                    + "<td>" + data[i].nombre_categoria +"</td>"
+                    if (data[i].cant_pedida) {
+                        table += "<td>" + data[i].existencias + "("+ data[i].cant_pedida + ")" +"</td>" ;
+                    } else {
+                        table += "<td>" + data[i].existencias +"</td>" ;
+                    }
+
             table += "</tr>";
         }
 

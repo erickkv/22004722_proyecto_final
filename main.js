@@ -3,10 +3,10 @@ const path = require('path');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 
-let dataProductos = [
+/* let dataProductos = [
     {id: 1, nombre: "jabón de manos", descripcion: "jabón de manos marca X", categoria: "higiene", existencias: 200},
     {id: 2, nombre: "pollo", descripcion: "pollo entero marca pio rey", categoria: "carnes", existencias: 25}
-];
+]; */
 
 //crear conexion
 const connection = mysql.createConnection({
@@ -43,13 +43,15 @@ function createWindowPrinc() {
     ventanaPrinc.loadFile('principal.html');
 
     connection.promise()
-        .execute(`SELECT * FROM productos`)
+        .execute(`SELECT prod.cod, prod.nombre, prod.descripcion, cat.nombre_categoria, prod.existencias, peds.cant AS cant_pedida
+                    FROM productos AS prod
+                    JOIN categorias AS cat ON cat.cod = prod.cod_cat
+                    LEFT JOIN pedidos AS peds ON peds.cod_prod = prod.cod;`)
     .then(([results, fields])=>{
         console.log(results)
         console.log(fields)
-        listaVentana.webContents.on('did-finish-load',()=>{
-            listaVentana.webContents.send('recibir-datos',
-            results)
+        ventanaPrinc.webContents.on('did-finish-load',()=>{
+            ventanaPrinc.webContents.send('enviarDatosProds', results)
         })
     })
 }
@@ -71,7 +73,7 @@ function createventanaEditarProd() {
 //para ventana de pedidos
 let ventanaHacerPedido;
 
-function createventanaHacerPedido() {
+function createventanaHacerPedido(datos) {
     ventanaHacerPedido = new BrowserWindow({
         width: 800,
         height: 600,
@@ -79,7 +81,10 @@ function createventanaHacerPedido() {
             preload: path.join(app.getAppPath(), 'preload.js')
         }
     });
-    ventanaHacerPedido.loadFile('pedido-prod.html')
+    ventanaHacerPedido.loadFile('pedido-prod.html');
+    ventanaHacerPedido.webContents.on('did-finish-load', function() {
+        ventanaHacerPedido.webContents.send('enviarInfoProds', datos)
+    });
 }
 
 
@@ -117,9 +122,17 @@ ipcMain.on('editarProductoValido', function(event, args) {
 
 //cargar ventana para hacer pedido
 ipcMain.on('hacerPedido', function(event, args) {
-    createventanaHacerPedido();
-    ventanaHacerPedido.webContents.on('did-finish-load', function() {
-        ventanaHacerPedido.webContents.send('enviarInfoProds', args)
+    connection.promise()
+            .execute(`SELECT provs.nombre AS nombre_proveedor
+            FROM proveedores AS provs
+            JOIN provs_prods AS pp ON provs.id = pp.id_prov
+            JOIN productos AS prods ON pp.cod_prod = prods.cod
+            WHERE prods.nombre = '${args['currNombre']}'`)
+    .then(([results, fields])=>{
+        console.log(results)
+        console.log(fields)
+        createventanaHacerPedido([args,results])
+
     });
 });
 
