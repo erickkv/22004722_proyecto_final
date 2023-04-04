@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const path = require('path');
 const mysql = require('mysql2');
+const bcrypt = require('bcrypt');
 
 let dataProductos = [
     {id: 1, nombre: "jabón de manos", descripcion: "jabón de manos marca X", categoria: "higiene", existencias: 200},
@@ -94,7 +95,7 @@ ipcMain.on('registroValido', function(event, args) {
             createWindowPrinc();
             ventana.close();
         }else{
-            loginVentana.webContents.send('inicio-error','Error autenticando')
+            ventana.webContents.send('usuarioValido', false)
         }
     })
 });
