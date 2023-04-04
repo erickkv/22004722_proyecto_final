@@ -48,8 +48,6 @@ function createWindowPrinc() {
                     JOIN categorias AS cat ON cat.cod = prod.cod_cat
                     LEFT JOIN pedidos AS peds ON peds.cod_prod = prod.cod;`)
     .then(([results, fields])=>{
-        console.log(results)
-        console.log(fields)
         ventanaPrinc.webContents.on('did-finish-load',()=>{
             ventanaPrinc.webContents.send('enviarDatosProds', results)
         })
@@ -122,15 +120,15 @@ ipcMain.on('editarProductoValido', function(event, args) {
 
 //cargar ventana para hacer pedido
 ipcMain.on('hacerPedido', function(event, args) {
+    console.log(args)
     connection.promise()
             .execute(`SELECT provs.nombre AS nombre_proveedor
             FROM proveedores AS provs
             JOIN provs_prods AS pp ON provs.id = pp.id_prov
             JOIN productos AS prods ON pp.cod_prod = prods.cod
-            WHERE prods.nombre = '${args['currNombre']}'`)
+            WHERE prods.nombre = '${args[1]}'`)
     .then(([results, fields])=>{
         console.log(results)
-        console.log(fields)
         createventanaHacerPedido([args,results])
 
     });

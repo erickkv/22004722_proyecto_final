@@ -4,6 +4,6 @@ let proveedor = document.getElementById("proveedor");
 let cant = document.getElementById("cant-pedido");
 
 window.comunicacion.enviarInfoProds(function(event, args) {
-    id.value = args[0];
-    nombre.value = args[1];
+    id.value = args[0][0];
+    nombre.value = args[0][1];
 })
