@@ -17,6 +17,12 @@ contextBridge.exposeInMainWorld (
         hacerPedido: (datos) => ipcRenderer.send('hacerPedido', datos),
 
         //enviar info de productos en editar o en pedidos
-        enviarInfoProds: (callback) => ipcRenderer.on('enviarInfoProds', callback)
+        enviarInfoProds: (callback) => ipcRenderer.on('enviarInfoProds', callback),
+
+        //consulta de pedidos a main, para hacer query de lista pedidos
+        consultaPedido: (datos) => ipcRenderer.send('consultaPedido', datos),
+
+        //eror si ya hay pedido de un producto para el proveedor
+        errorPedido: (canal, callback) =>ipcRenderer.on('errorPedido',callback)
     }
 )

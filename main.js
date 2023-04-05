@@ -43,10 +43,11 @@ function createWindowPrinc() {
     ventanaPrinc.loadFile('principal.html');
 
     connection.promise()
-        .execute(`SELECT prod.cod, prod.nombre, prod.descripcion, cat.nombre_categoria, prod.existencias, peds.cant AS cant_pedida
+        .execute(`SELECT prod.cod, prod.nombre, prod.descripcion, cat.nombre_categoria, prod.existencias, SUM(peds.cant) AS cant_pedida
                     FROM productos AS prod
-                    JOIN categorias AS cat ON cat.cod = prod.cod_cat
-                    LEFT JOIN pedidos AS peds ON peds.cod_prod = prod.cod;`)
+                    LEFT JOIN categorias AS cat ON cat.cod = prod.cod_cat
+                    LEFT JOIN pedidos AS peds ON peds.cod_prod = prod.cod
+                    GROUP BY prod.cod`)
     .then(([results, fields])=>{
         ventanaPrinc.webContents.on('did-finish-load',()=>{
             ventanaPrinc.webContents.send('enviarDatosProds', results)
@@ -130,9 +131,42 @@ ipcMain.on('hacerPedido', function(event, args) {
     .then(([results, fields])=>{
         console.log(results)
         createventanaHacerPedido([args,results])
-
+        ventanaPrinc.close();
     });
 });
 
+ipcMain.on('consultaPedido', function (event,args) {
+    let proveedor;
+    console.log(args)
+    connection.promise()
+            .execute(`SELECT provs.nombre, peds.cod_prod, peds.cant
+                        FROM proveedores AS provs
+                        JOIN pedidos AS peds ON peds.id_prov = provs.id
+                        WHERE provs.nombre = ? AND peds.cod_prod = ?`, [args[1], args[0]])
+    .then(([results, fields])=>{
+        console.log(results)
+        if(results.length > 0){
+          console.log("ya hay")
+          ventanaHacerPedido.webContents.send('errorPedido', 'No puede hacer pedido al proveedor seleccionado porque ' +
+          'ya tiene un pedido de este producto')
+        }
+        else {
+            connection.promise()
+                .execute(`SELECT id FROM proveedores WHERE nombre = ?`, [args[1]])
+            .then(([resultado, campos])=>{
+                proveedor = resultado[0].id;
+            })
+            .then(() => {
+                connection.promise().execute(`INSERT INTO pedidos (cod_prod, id_prov, cant)
+                    values (?, ?, ?)`, [args[0], proveedor, args[2]])
+            })
+            .then(() => {
+                createWindowPrinc();
+                ventanaHacerPedido.close()
+            })
+
+        }
+    })
+})
 
 app.whenReady().then(createWindow)

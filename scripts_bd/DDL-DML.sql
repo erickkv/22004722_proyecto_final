@@ -72,5 +72,9 @@ insert into provs_prods values
     (null, "det-liq-001", 8),
     (null, "lech-oz", 9);
     
+insert into proveedores values
+	(null, "vendedores-de-pepno-2");
     
+insert into provs_prods values
+	(null, "bebs-pepno-355-la", 10)
     
