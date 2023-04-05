@@ -116,6 +116,7 @@ ipcMain.on('editarProductoValido', function(event, args) {
     createventanaEditarProd();
     ventanaEditarProd.webContents.on('did-finish-load', function() {
         ventanaEditarProd.webContents.send('enviarInfoProds', args)
+        console.log(args)
     });
 });
 
@@ -131,7 +132,6 @@ ipcMain.on('hacerPedido', function(event, args) {
     .then(([results, fields])=>{
         console.log(results)
         createventanaHacerPedido([args,results])
-        ventanaPrinc.close();
     });
 });
 
@@ -161,11 +161,29 @@ ipcMain.on('consultaPedido', function (event,args) {
                     values (?, ?, ?)`, [args[0], proveedor, args[2]])
             })
             .then(() => {
+                ventanaPrinc.close();
                 createWindowPrinc();
                 ventanaHacerPedido.close()
             })
 
         }
+    })
+})
+
+ipcMain.on('descartarCambios', function(event){
+    ventanaEditarProd.close()
+});
+
+ipcMain.on('editarInfo', function(event, args) {
+    console.log(args)
+    connection.promise()
+            .execute(`UPDATE productos
+                        SET nombre = ?, descripcion = ?, existencias = ?
+                        WHERE cod = ?;`, [args[1], args[2], args[3], args[0]])
+    .then(() => {
+        ventanaPrinc.close();
+        createWindowPrinc();
+        ventanaEditarProd.close();
     })
 })
 

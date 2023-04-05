@@ -23,6 +23,12 @@ contextBridge.exposeInMainWorld (
         consultaPedido: (datos) => ipcRenderer.send('consultaPedido', datos),
 
         //eror si ya hay pedido de un producto para el proveedor
-        errorPedido: (canal, callback) =>ipcRenderer.on('errorPedido',callback)
+        errorPedido: (canal, callback) =>ipcRenderer.on('errorPedido',callback),
+
+        //ventana de edicion: descartar cambios
+        descartarCambios: () => ipcRenderer.send('descartarCambios'),
+
+        //ventana editar información: enviar informacion para actualizar base de datos
+        editarInfo : (datos) => ipcRenderer.send("editarInfo", datos)
     }
 )
