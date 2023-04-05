@@ -56,7 +56,7 @@ CREATE TABLE `pedidos` (
   KEY `id_prov` (`id_prov`),
   CONSTRAINT `pedidos_ibfk_1` FOREIGN KEY (`cod_prod`) REFERENCES `productos` (`cod`),
   CONSTRAINT `pedidos_ibfk_2` FOREIGN KEY (`id_prov`) REFERENCES `proveedores` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,6 +65,7 @@ CREATE TABLE `pedidos` (
 
 LOCK TABLES `pedidos` WRITE;
 /*!40000 ALTER TABLE `pedidos` DISABLE KEYS */;
+INSERT INTO `pedidos` VALUES (1,'bebs-pepno-355-la',7,2);
 /*!40000 ALTER TABLE `pedidos` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,7 +109,7 @@ CREATE TABLE `proveedores` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nombre` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -117,7 +118,7 @@ CREATE TABLE `proveedores` (
 
 LOCK TABLES `proveedores` WRITE;
 /*!40000 ALTER TABLE `proveedores` DISABLE KEYS */;
-INSERT INTO `proveedores` VALUES (1,'pio-rey'),(2,'multicarnes'),(3,'vacacortes'),(4,'michael scotch'),(5,'lamparas aladin'),(6,'cola-loca guatemala'),(7,'amber'),(8,'limpiolin'),(9,'la troca');
+INSERT INTO `proveedores` VALUES (1,'pio-rey'),(2,'multicarnes'),(3,'vacacortes'),(4,'michael scotch'),(5,'lamparas aladin'),(6,'cola-loca guatemala'),(7,'amber'),(8,'limpiolin'),(9,'la troca'),(10,'vendedores-de-pepno-2');
 /*!40000 ALTER TABLE `proveedores` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -137,7 +138,7 @@ CREATE TABLE `provs_prods` (
   KEY `id_prov` (`id_prov`),
   CONSTRAINT `provs_prods_ibfk_1` FOREIGN KEY (`cod_prod`) REFERENCES `productos` (`cod`),
   CONSTRAINT `provs_prods_ibfk_2` FOREIGN KEY (`id_prov`) REFERENCES `proveedores` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +147,7 @@ CREATE TABLE `provs_prods` (
 
 LOCK TABLES `provs_prods` WRITE;
 /*!40000 ALTER TABLE `provs_prods` DISABLE KEYS */;
-INSERT INTO `provs_prods` VALUES (1,'carn-pol-pech-01',1),(2,'carn-res-lom-01',3),(3,'pap-hig-01',4),(4,'hog-lamp-01',5),(5,'bebs-col-loc-355-la',6),(6,'bebs-pepno-355-la',7),(7,'det-liq-001',8),(8,'lech-oz',9);
+INSERT INTO `provs_prods` VALUES (1,'carn-pol-pech-01',1),(2,'carn-res-lom-01',3),(3,'pap-hig-01',4),(4,'hog-lamp-01',5),(5,'bebs-col-loc-355-la',6),(6,'bebs-pepno-355-la',7),(7,'det-liq-001',8),(8,'lech-oz',9),(9,'bebs-pepno-355-la',10);
 /*!40000 ALTER TABLE `provs_prods` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,14 +176,6 @@ LOCK TABLES `usuarios` WRITE;
 INSERT INTO `usuarios` VALUES (1,'usuario','$2b$10$46oYHS4dRLjaBG8UXmgIeeuVgw/NzjQAIg7RJpahej41Bbnr3VnOO');
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
-
---
--- Dumping events for database 'punto_de_venta'
---
-
---
--- Dumping routines for database 'punto_de_venta'
---
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
